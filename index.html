@@ -198,20 +198,6 @@ header::after{
   transform:scale(.985);
   box-shadow:0 2px 12px rgba(0,0,0,.3);
 }
-/* رقم الذكر */
-.card-num{
-  position:absolute;
-  top:12px;left:14px;
-  font-size:11px;
-  color:var(--text-dim);
-  font-family:'Tajawal',sans-serif;
-  font-weight:500;
-  background:var(--surface2);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:2px 9px;
-  letter-spacing:.3px;
-}
 .zikr-card::before{
   content:'';position:absolute;
   top:0;right:0;width:4px;height:100%;
@@ -723,7 +709,6 @@ function init(){
 function buildGrid(tab){
   const grid=document.getElementById('grid-'+tab);
   grid.innerHTML='';
-  const total=DATA[tab].length;
   DATA[tab].forEach((z,i)=>{
     const MAX=z.count;
     const showDots=MAX<=20;
@@ -737,8 +722,7 @@ function buildGrid(tab){
     // click anywhere on card = inc
     card.addEventListener('click', ()=>inc(tab,i));
     card.innerHTML=`
-      <div class="card-num">${toArabicNum(i+1)} من ${toArabicNum(total)}</div>
-      <div class="zikr-text" style="padding-right:4px;padding-left:50px;">${z.text.replace(/\n/g,'<br>')}</div>
+      <div class="zikr-text">${z.text.replace(/\n/g,'<br>')}</div>
       <div class="zikr-source">📖 ${z.source}</div>
       <div class="tasbih-section">
         <button class="btn-count" id="btn-${tab}-${i}" style="--pct:0%" onclick="event.stopPropagation();inc('${tab}',${i})">
@@ -754,10 +738,6 @@ function buildGrid(tab){
     grid.appendChild(card);
   });
   updateProg(tab);
-}
-
-function toArabicNum(n){
-  return String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 }
 
 function inc(tab,i){
