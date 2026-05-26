@@ -191,6 +191,26 @@ header::after{
   transition:all .2s;
   position:relative;overflow:hidden;
   box-shadow:var(--shadow);
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.zikr-card:active:not(.done){
+  transform:scale(.985);
+  box-shadow:0 2px 12px rgba(0,0,0,.3);
+}
+/* رقم الذكر */
+.card-num{
+  position:absolute;
+  top:12px;left:14px;
+  font-size:11px;
+  color:var(--text-dim);
+  font-family:'Tajawal',sans-serif;
+  font-weight:500;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:2px 9px;
+  letter-spacing:.3px;
 }
 .zikr-card::before{
   content:'';position:absolute;
@@ -219,34 +239,68 @@ header::after{
 }
 .zikr-source{
   font-size:12px;color:var(--text-dim);
-  margin-bottom:14px;
+  margin-bottom:18px;
 }
 
-.zikr-footer{
-  display:flex;align-items:center;
-  justify-content:space-between;gap:10px;
+/* ── tasbih section ── */
+.tasbih-section{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  padding-bottom:4px;
 }
 
-.counter-wrap{
+/* big circular tasbih button */
+.btn-count{
+  position:relative;
+  width:96px;height:96px;
+  border-radius:50%;
+  cursor:pointer;
+  border:none;
+  background:conic-gradient(var(--gold) 0%, var(--gold) var(--pct,0%), var(--surface2) var(--pct,0%));
   display:flex;flex-direction:column;
-  align-items:center;min-width:56px;
+  align-items:center;justify-content:center;
+  transition:transform .12s, box-shadow .2s;
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  box-shadow:0 4px 20px rgba(201,168,76,.2), inset 0 0 0 6px var(--surface);
+  flex-shrink:0;
 }
-.counter-num{
-  font-size:24px;font-weight:700;
-  color:var(--gold2);line-height:1;
+[data-theme="light"] .btn-count{
+  box-shadow:0 4px 20px rgba(160,120,40,.18), inset 0 0 0 6px var(--surface);
+}
+.btn-count:active{
+  transform:scale(.93);
+  box-shadow:0 2px 10px rgba(201,168,76,.3), inset 0 0 0 6px var(--surface);
+}
+.btn-count-num{
+  font-size:26px;font-weight:700;
+  color:var(--gold2);
   font-family:'Tajawal',sans-serif;
+  line-height:1;
+  pointer-events:none;
 }
-.counter-total{
-  font-size:12px;color:var(--text-dim);margin-top:2px;
+.btn-count-label{
+  font-size:11px;color:var(--text-dim);
+  pointer-events:none;
+  margin-top:2px;
 }
+.done .btn-count{
+  background:conic-gradient(var(--green) 100%, var(--green) 100%);
+  box-shadow:0 4px 20px rgba(63,185,80,.25), inset 0 0 0 6px var(--surface);
+  cursor:default;
+}
+.done .btn-count-num{color:var(--green);}
 
 /* dots */
 .dots-row{
-  display:flex;gap:5px;flex-wrap:wrap;
-  flex:1;justify-content:center;
+  display:flex;gap:6px;flex-wrap:wrap;
+  justify-content:center;
+  max-width:300px;
 }
 .dot{
-  width:11px;height:11px;border-radius:50%;
+  width:10px;height:10px;border-radius:50%;
   background:var(--border);
   transition:all .18s;
 }
@@ -262,39 +316,23 @@ header::after{
   box-shadow:0 0 5px rgba(63,185,80,.5);
 }
 
-/* big count btn */
-.btn-count{
-  background:var(--gold-dim);
-  border:1.5px solid var(--gold);
-  color:var(--gold2);
-  width:50px;height:50px;
-  border-radius:50%;
-  cursor:pointer;
-  font-size:24px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;
-  transition:all .15s;
-  flex-shrink:0;
-  user-select:none;
-  -webkit-tap-highlight-color:transparent;
-  box-shadow:0 2px 8px rgba(201,168,76,.15);
-}
-.btn-count:active{
-  transform:scale(.88);
-  background:rgba(201,168,76,.3);
-}
-.done .btn-count{display:none;}
-
 .done-badge{
   display:none;align-items:center;
-  gap:5px;color:var(--green);
-  font-size:14px;font-weight:600;
+  gap:6px;color:var(--green);
+  font-size:15px;font-weight:700;
 }
 .done .done-badge{display:flex;}
 
+/* bottom row: reset */
+.card-bottom{
+  display:flex;align-items:center;
+  justify-content:flex-end;
+  margin-top:6px;
+}
 .btn-reset-one{
   background:none;border:none;
   color:var(--text-dim);cursor:pointer;
-  font-size:13px;padding:4px 8px;
+  font-size:13px;padding:4px 10px;
   border-radius:6px;
   transition:all .2s;
   font-family:'Tajawal',sans-serif;
@@ -380,6 +418,8 @@ header::after{
   <button class="tab-btn active" id="tbtn-sabah" onclick="switchTab('sabah',this)">🌅 أذكار الصباح</button>
   <button class="tab-btn" id="tbtn-masaa" onclick="switchTab('masaa',this)">🌇 أذكار المساء</button>
 </div>
+
+
 
 <!-- SABAH -->
 <div class="tab-content active" id="tab-sabah">
@@ -500,7 +540,7 @@ const DATA = {
     },
     {
       text:"لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
-      source:"رواه البخاري ومسلم",count:10
+      source:"رواه البخاري ومسلم",count:100
     },
     {
       text:"اللَّهُمَّ عَالِمَ الْغَيْبِ وَالشَّهَادَةِ فَاطِرَ السَّمَاوَاتِ وَالأَرْضِ، رَبَّ كُلِّ شَيْءٍ وَمَلِيكَهُ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا أَنْتَ، أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي وَمِنْ شَرِّ الشَّيْطَانِ وَشِرْكِهِ، وَأَنْ أَقْتَرِفَ عَلَى نَفْسِي سُوءًا أَوْ أَجُرَّهُ إِلَى مُسْلِمٍ",
@@ -513,6 +553,30 @@ const DATA = {
     {
       text:"اسْتَغْفِرُ اللَّهَ الْعَظِيمَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",
       source:"رواه أبو داود والترمذي",count:3
+    },
+    {
+      text:"أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذَا الْيَوْمِ، فَتْحَهُ وَنَصْرَهُ وَنُورَهُ وَبَرَكَتَهُ وَهُدَاهُ، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِيهِ وَشَرِّ مَا بَعْدَهُ",
+      source:"رواه أبو داود",count:1
+    },
+    {
+      text:"اللَّهُمَّ إِنَّا نَعُوذُ بِكَ مِنْ أَنْ نُشْرِكَ بِكَ شَيْئًا نَعْلَمُهُ، وَنَسْتَغْفِرُكَ لِمَا لَا نَعْلَمُهُ",
+      source:"رواه أحمد",count:3
+    },
+    {
+      text:"يَا رَبِّ لَكَ الْحَمْدُ كَمَا يَنْبَغِي لِجَلَالِ وَجْهِكَ وَلِعَظِيمِ سُلْطَانِكَ",
+      source:"رواه ابن ماجه",count:3
+    },
+    {
+      text:"اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا",
+      source:"رواه ابن ماجه",count:1
+    },
+    {
+      text:"أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+      source:"رواه مسلم",count:3
+    },
+    {
+      text:"أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ",
+      source:"رواه البخاري ومسلم",count:100
     }
   ],
   masaa:[
@@ -594,7 +658,7 @@ const DATA = {
     },
     {
       text:"اللَّهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَى سَيِّدِنَا مُحَمَّدٍ وَعَلَى آلِهِ وَصَحْبِهِ وَسَلِّمْ",
-      source:"الصلاة على النبي ﷺ",count:3
+      source:"الصلاة على النبي ﷺ",count:10
     },
     {
       text:"اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي، اللَّهُمَّ اسْتُرْ عَوْرَاتِي وَآمِنْ رَوْعَاتِي، اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ وَمِنْ خَلْفِي وَعَنْ يَمِينِي وَعَنْ شِمَالِي وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي",
@@ -618,11 +682,31 @@ const DATA = {
     },
     {
       text:"لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
-      source:"رواه البخاري ومسلم",count:10
+      source:"رواه البخاري ومسلم",count:100
     },
     {
       text:"اسْتَغْفِرُ اللَّهَ الْعَظِيمَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",
       source:"رواه أبو داود والترمذي",count:3
+    },
+    {
+      text:"أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ، اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذِهِ اللَّيْلَةِ فَتْحَهَا وَنَصْرَهَا، وَنُورَهَا وَبَرَكَتَهَا وَهُدَاهَا، وَأَعُوذُ بِكَ مِنْ شَرِّ مَا فِيهَا وَشَرِّ مَا بَعْدَهَا",
+      source:"رواه أبو داود",count:1
+    },
+    {
+      text:"اللَّهُمَّ إِنَّا نَعُوذُ بِكَ مِنْ أَنْ نُشْرِكَ بِكَ شَيْئًا نَعْلَمُهُ، وَنَسْتَغْفِرُكَ لِمَا لَا نَعْلَمُهُ",
+      source:"رواه أحمد",count:3
+    },
+    {
+      text:"يَا رَبِّ لَكَ الْحَمْدُ كَمَا يَنْبَغِي لِجَلَالِ وَجْهِكَ وَلِعَظِيمِ سُلْطَانِكَ",
+      source:"رواه ابن ماجه",count:3
+    },
+    {
+      text:"اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا",
+      source:"رواه ابن ماجه",count:1
+    },
+    {
+      text:"أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ",
+      source:"رواه البخاري ومسلم",count:100
     }
   ]
 };
@@ -639,6 +723,7 @@ function init(){
 function buildGrid(tab){
   const grid=document.getElementById('grid-'+tab);
   grid.innerHTML='';
+  const total=DATA[tab].length;
   DATA[tab].forEach((z,i)=>{
     const MAX=z.count;
     const showDots=MAX<=20;
@@ -649,42 +734,79 @@ function buildGrid(tab){
     const card=document.createElement('div');
     card.className='zikr-card';
     card.id='card-'+tab+'-'+i;
+    // click anywhere on card = inc
+    card.addEventListener('click', ()=>inc(tab,i));
     card.innerHTML=`
-      <div class="zikr-text">${z.text.replace(/\n/g,'<br>')}</div>
+      <div class="card-num">${toArabicNum(i+1)} من ${toArabicNum(total)}</div>
+      <div class="zikr-text" style="padding-right:4px;padding-left:50px;">${z.text.replace(/\n/g,'<br>')}</div>
       <div class="zikr-source">📖 ${z.source}</div>
-      <div class="zikr-footer">
-        <div class="counter-wrap">
-          <div class="counter-num" id="cn-${tab}-${i}">0</div>
-          <div class="counter-total">من ${MAX}</div>
-        </div>
+      <div class="tasbih-section">
+        <button class="btn-count" id="btn-${tab}-${i}" style="--pct:0%" onclick="event.stopPropagation();inc('${tab}',${i})">
+          <span class="btn-count-num" id="cn-${tab}-${i}">0</span>
+          <span class="btn-count-label">من ${MAX}</span>
+        </button>
         ${dotsHTML}
-        <button class="btn-count" onclick="inc('${tab}',${i})">+</button>
-        <div class="done-badge">✅ تم</div>
-        <button class="btn-reset-one" onclick="resetOne('${tab}',${i})">↺</button>
+        <div class="done-badge">✅ اكتمل</div>
+      </div>
+      <div class="card-bottom">
+        <button class="btn-reset-one" onclick="event.stopPropagation();resetOne('${tab}',${i})">↺ إعادة</button>
       </div>`;
     grid.appendChild(card);
   });
   updateProg(tab);
 }
 
+function toArabicNum(n){
+  return String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+}
+
 function inc(tab,i){
   const MAX=DATA[tab][i].count;
   if(state[tab][i]>=MAX)return;
+  // haptic
+  if(navigator.vibrate) navigator.vibrate(18);
   state[tab][i]++;
   const cur=state[tab][i];
   document.getElementById('cn-'+tab+'-'+i).textContent=cur;
+  // update ring
+  const pct=Math.round(cur/MAX*100)+'%';
+  const btn=document.getElementById('btn-'+tab+'-'+i);
+  if(btn) btn.style.setProperty('--pct',pct);
   if(DATA[tab][i].count<=20){
     const dot=document.getElementById('d-'+tab+'-'+i+'-'+(cur-1));
     if(dot)dot.classList.add('filled');
   }
-  if(cur>=MAX)document.getElementById('card-'+tab+'-'+i).classList.add('done');
+  if(cur>=MAX){
+    document.getElementById('card-'+tab+'-'+i).classList.add('done');
+    // scroll to next undone card
+    setTimeout(()=>scrollToNext(tab,i),500);
+  }
   updateProg(tab);
+}
+
+function scrollToNext(tab,i){
+  const total=DATA[tab].length;
+  for(let j=i+1;j<total;j++){
+    if(state[tab][j]<DATA[tab][j].count){
+      const nextCard=document.getElementById('card-'+tab+'-'+j);
+      if(nextCard){
+        nextCard.scrollIntoView({behavior:'smooth',block:'center'});
+        // brief highlight
+        nextCard.style.transition='box-shadow .15s';
+        nextCard.style.boxShadow='0 0 0 2px var(--gold)';
+        setTimeout(()=>{nextCard.style.boxShadow='';},700);
+      }
+      return;
+    }
+  }
 }
 
 function resetOne(tab,i){
   state[tab][i]=0;
   document.getElementById('cn-'+tab+'-'+i).textContent='0';
   document.getElementById('card-'+tab+'-'+i).classList.remove('done');
+  const btn=document.getElementById('btn-'+tab+'-'+i);
+  if(btn) btn.style.setProperty('--pct','0%');
   const MAX=DATA[tab][i].count;
   if(MAX<=20){
     for(let d=0;d<MAX;d++){
@@ -700,7 +822,7 @@ function updateProg(tab){
   const done=DATA[tab].filter((_,i)=>state[tab][i]>=DATA[tab][i].count).length;
   document.getElementById('prog-'+tab).textContent=done+' / '+total;
   document.getElementById('fill-'+tab).style.width=(done/total*100)+'%';
-  if(done===total&&total>0)setTimeout(showCel,400);
+  if(done===total&&total>0){ setTimeout(showCel,400); }
 }
 
 function showCel(){
