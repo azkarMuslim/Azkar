@@ -387,9 +387,9 @@ header::after{
 
 <div class="top-bar">
   <div class="font-ctrl">
-    <button class="font-btn" onclick="changeFont(-1)" title="تصغير الخط">ـأ</button>
-    <span class="font-size-label" id="fontLabel">100%</span>
-    <button class="font-btn" onclick="changeFont(1)" title="تكبير الخط">أ</button>
+    <button class="font-btn" onclick="changeFont(-1)" title="تصغير الخط">−A</button>
+    <span class="font-size-label" id="fontLabel">150%</span>
+    <button class="font-btn" onclick="changeFont(1)" title="تكبير الخط">+A</button>
   </div>
   <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="تبديل المظهر">🌙</button>
 </div>
@@ -833,15 +833,17 @@ function toggleTheme(){
   document.getElementById('themeBtn').textContent=isDark?'🌙':'☀️';
 }
 
-let fontScale=1;
+let fontScale=1.5;
 const fontSteps=[0.75,0.85,1,1.15,1.3,1.5,1.75];
-let fontIdx=2;
+let fontIdx=5;
 function changeFont(dir){
   fontIdx=Math.max(0,Math.min(fontSteps.length-1,fontIdx+dir));
   fontScale=fontSteps[fontIdx];
   document.documentElement.style.setProperty('--font-scale',fontScale);
   document.getElementById('fontLabel').textContent=Math.round(fontScale*100)+'%';
 }
+// apply default on load
+document.documentElement.style.setProperty('--font-scale',fontScale);
 
 init();
 </script>
