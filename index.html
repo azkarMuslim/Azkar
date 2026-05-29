@@ -401,14 +401,14 @@ header::after{
 </header>
 
 <div class="tabs">
-  <button class="tab-btn active" id="tbtn-sabah" onclick="switchTab('sabah',this)">🌅 أذكار الصباح</button>
+  <button class="tab-btn" id="tbtn-sabah" onclick="switchTab('sabah',this)">🌅 أذكار الصباح</button>
   <button class="tab-btn" id="tbtn-masaa" onclick="switchTab('masaa',this)">🌇 أذكار المساء</button>
 </div>
 
 
 
 <!-- SABAH -->
-<div class="tab-content active" id="tab-sabah">
+<div class="tab-content" id="tab-sabah">
   <div class="progress-wrap">
     <div class="progress-info"><span>التقدم</span><span id="prog-sabah">0 / 0</span></div>
     <div class="progress-bar"><div class="progress-fill" id="fill-sabah"></div></div>
@@ -826,6 +826,26 @@ function switchTab(tab,btn){
   curTab=tab;
 }
 
+function getDefaultTab(){
+  const now=new Date();
+  const h=now.getHours();
+  const m=now.getMinutes();
+  // صباح: من 3:30 صباحاً (3:30) حتى 3:30 عصراً (15:30)
+  const totalMins=h*60+m;
+  return (totalMins>=210 && totalMins<930)?'sabah':'masaa';
+}
+
+function applyDefaultTab(){
+  const tab=getDefaultTab();
+  const btn=document.getElementById('tbtn-'+tab);
+  // remove active from all first
+  document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  btn.classList.add('active');
+  curTab=tab;
+}
+
 function toggleTheme(){
   const body=document.body;
   const isDark=body.dataset.theme==='dark';
@@ -846,6 +866,7 @@ function changeFont(dir){
 document.documentElement.style.setProperty('--font-scale',fontScale);
 
 init();
+applyDefaultTab();
 </script>
 </body>
 </html>
